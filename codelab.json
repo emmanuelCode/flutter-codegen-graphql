@@ -1,0 +1,19 @@
+{
+  "environment": "web",
+  "format": "html",
+  "prefix": "https://storage.googleapis.com",
+  "mainga": "UA-49880327-14",
+  "updated": "2024-01-05T15:00:46-05:00",
+  "id": "flutter-codegen-graphql",
+  "duration": 0,
+  "title": "Flutter Codegen with GraphQL",
+  "authors": "emmanuelCode",
+  "summary": "Flutter Codegen with GraphQL",
+  "source": "flutter-codegen-graphql.md",
+  "theme": "",
+  "status": null,
+  "category": null,
+  "tags": [],
+  "feedback": "https://github.com/emmanuelCode/graphql-codegen-flutter/issues/new",
+  "url": "flutter-codegen-graphql"
+}
