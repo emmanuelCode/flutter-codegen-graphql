@@ -30,9 +30,9 @@
       <google-codelab-step label="Getting Started" duration="0">
         <h2 is-upgraded>Things to keep in mind</h2>
 <ul>
-<li>This codelabs was tested with Ubuntu in mind using the Terminal. For Mac and Windows, see their respective equivalent.</li>
-<li>The IDE I&#39;ve used for this codelab is VSCode, some extensions or plugins I may use not be available on other IDEs.</li>
-<li>This is my own codelab, I am not part of Google nor I have been endorsed by them.</li>
+<li>This codelabs was tested with Linux in mind using the Terminal. For Mac and Windows, see their respective equivalent.</li>
+<li>The IDE I used for this codelab is VS Code; some extensions or plugins I used might not be available on other IDEs.</li>
+<li>This is my own codelab; I am not affiliated with Google, nor have I been endorsed by them.</li>
 </ul>
 <h2 class="checklist" is-upgraded>What you&#39;ll learn</h2>
 <ul class="checklist">
@@ -56,7 +56,7 @@
     
       <google-codelab-step label="Introspection" duration="0">
         <p>To be able to use the GraphQL code generator, you&#39;ll have to make use of introspection. Introspection allows you to ask your GraphQL server about the types it supports and provides detailed information about it. You will make use of it in order to get Dgraph complete generated schema. In order to do so, you&#39;ll need the help of the <a href="https://github.com/prisma-labs/get-graphql-schema" target="_blank">Get GraphQL Schema</a> library.</p>
-<p>The library is available in node package manager (npm). So first, <a href="https://github.com/nodesource/distributions#installation-instructions" target="_blank">install nodejs</a>. Open a Terminal, then run <code>sudo npm install -g get-graphql-schema</code> to install it.</p>
+<p>The library is available in node package manager (npm). So first, <a href="https://nodejs.org/en/download" target="_blank">install nodejs</a>. Open a Terminal, then run <code>sudo npm install -g get-graphql-schema</code> to install it.</p>
 <p>Start up a Dgraph local server on a new Terminal with <code>sudo docker run -it -p 8080:8080 dgraph/standalone:latest</code>.</p>
 <p>Create an empty flutter project and name it <code>flutter_codegen_graphql</code> of whatever name of your choosing. Prepare a Dgraph schema and name it <code>schema.dgraph.graphql</code>. This will be its content:</p>
 <pre><code language="language-graphql" class="language-graphql">type MyBook {
@@ -113,7 +113,7 @@
         <h2 is-upgraded>Setup</h2>
 <p>To prepare yourself to generating code you&#39;ll need to install the <code>graphql_codegen</code> along with <code>build_runner</code> packages. Run the following command to install <code>flutter pub add --dev graphql_codegen build_runner</code>.</p>
 <p>To be able to use the generated helper methods on the GraphQL client you&#39;ll also need to install <code>graphql</code>. Run the following command to install <code>flutter pub add graphql</code>.</p>
-<p>You&#39;ll need to create a configuration file to tell the <code>graphql_codgen</code> to recognize GraphQL <a href="https://graphql.org/learn/schema/#scalar-types" target="_blank">scalar types</a> to be remapped as Dart types. To learn about Dgraph supported types you can head over to <a href="https://dgraph.io/docs/graphql/schema/types/#scalars" target="_blank">Dgraph&#39;s Scalars types</a>.</p>
+<p>You&#39;ll need to create a configuration file to tell the <code>graphql_codgen</code> to recognize GraphQL <a href="https://graphql.org/learn/schema/#scalar-types" target="_blank">scalar types</a> to be remapped as Dart types. To learn about Dgraph supported types you can head over to <a href="https://docs.dgraph.io/graphql/schema/types/#scalars" target="_blank">Dgraph&#39;s Scalars types</a>.</p>
 <p>You only need to define two scalar types <code>DateTime</code> and <code>Int64</code>. The reason for the <code>Int64</code> is that GraphQL <code>Int</code> scalar type is 32bit while Dart <code>int</code> is 64bit by Default. So we need to match it&#39;s interger range. As for <code>DateTime</code> it&#39;s uses the same rules. However, other GraphQL backend could defined it differently, that why you must specify it.</p>
 <p>You&#39;ll also need to define the <code>graphql</code> package to generate helper method for your queries. On the root of your Flutter project, create a <code>build.yaml</code> file and add the following:</p>
 <ul>
@@ -192,7 +192,7 @@
 <aside class="special"><p> As you may notice, the queries files are named with <code>.mutation</code> and <code>.query</code>. It is for reference, in large projects it will be very useful as you won&#39;t get lost on finding which file handle specific queries.</p>
 </aside>
 <h2 is-upgraded>Generate Dart Files</h2>
-<p>To generate your dart files, you&#39;ll have to make sure that your generated <code>schema.graphql</code> from earlier introspection is in the project. Then, you can run the command <code>dart run build_runner build -d</code> or <code>dart run build_runner build watch -d</code>. You will see the dart file generated for you.</p>
+<p>To generate your dart files, you&#39;ll have to make sure that your generated <code>schema.graphql</code> from earlier introspection is in the project. Then, you can run the command <code>dart run build_runner build</code> or <code>dart run build_runner watch</code>. You will see the dart file generated for you.</p>
 <aside class="special"><p> By default, the code generator outputs it&#39;s files next to each other. If you need more a granular control on where to generate the files you can get more detail <a href="https://pub.dev/packages/graphql_codegen#change-output-directory" target="_blank">here</a></p>
 </aside>
 
@@ -222,7 +222,7 @@ part &#39;my_book.freezed.dart&#39;;
 part &#39;my_book.g.dart&#39;;
 
 @freezed
-class MyBook with _$MyBook {
+abstract class MyBook with _$MyBook {
   const factory MyBook({
     required String id,
     required int bookNumber,
@@ -338,7 +338,6 @@ class MyBookQueries extends _$MyBookQueries {
     debugPrint(&#39;Delete: ${result.data}&#39;);
   }
 }
-
 </code></pre>
 <ul>
 <li><code>graphql_client.dart</code>:</li>
@@ -369,7 +368,7 @@ return GraphQLClient(
 
 
 @riverpod
-GraphQLClient graphQLClient(GraphQLClientRef ref) {
+GraphQLClient graphQLClient(Ref ref) {
   return graphQLClientInit();
 }
 </code></pre>
@@ -465,6 +464,7 @@ class _MyBookFormFieldState extends ConsumerState&lt;MyBookFormField&gt; {
   final idField = &#39;id (optional to add data)&#39;;
   final activityField = &#39;GraphQL Activity (Tap to copy id)&#39;;
   late bool enabled;
+  late ScrollController _scrollController;
   InputDecoration _decoration(String value) {
     // check which category where in and disable fields
     enabled = (idField == value || activityField == value)
@@ -479,14 +479,11 @@ class _MyBookFormFieldState extends ConsumerState&lt;MyBookFormField&gt; {
   }
 
   // variables for date picker field
-  late DateTime? currentDate;
-  late String _selectedDate = _dateFormat(DateTime.now());
+  DateTime? currentDate = DateTime.now();
+  late String _selectedDate = _dateFormat(currentDate!);
 
-  String _dateFormat(DateTime? date) {
-    currentDate = date;
-    return date == null
-        ? _selectedDate
-        : &#39;${date.year}/${date.month}/${date.day}&#39;;
+  String _dateFormat(DateTime date) {
+    return &#39;${date.year}/${date.month}/${date.day}&#39;;
   }
 
   // variables for dropdown favorite field
@@ -520,15 +517,7 @@ class _MyBookFormFieldState extends ConsumerState&lt;MyBookFormField&gt; {
   final TextEditingController _textEditBookNumber = TextEditingController();
   final TextEditingController _textEditTitle = TextEditingController();
 
-  // riverpod variables for queries, activity list and requestTypeList
-  late final _graphQLClient = ref.watch(graphQLClientProvider);
-  late final _myBookQueries =
-      ref.watch(MyBookQueriesProvider(_graphQLClient).notifier);
-  late List&lt;MyBook&gt; _myBookList = _myBookQueries.myBookListActivity;
-  late final List&lt;String&gt; _requestTypeList =
-      _myBookQueries.graphQLActivityListType;
-  void _updateList() =&gt;
-      setState(() =&gt; _myBookList = _myBookQueries.myBookListActivity);
+  final _formKey = GlobalKey&lt;FormState&gt;();
 
   // empty field checker for title/bookNumber
   String? _emptyFieldValidator(String? value) {
@@ -538,10 +527,45 @@ class _MyBookFormFieldState extends ConsumerState&lt;MyBookFormField&gt; {
     return null;
   }
 
-  final _formKey = GlobalKey&lt;FormState&gt;();
+  @override
+  void initState() {
+    super.initState();
+    _scrollController = ScrollController();
+  }
+
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    _textEditId.dispose();
+    _textEditBookNumber.dispose();
+    _textEditTitle.dispose();
+    super.dispose();
+  }
+
+  // scroll to bottom of list after every query
+  void _scrollToBottom() {
+  // Wait for the next frame to ensure the list has been updated before scrolling
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _scrollController.jumpTo(_scrollController.position.maxScrollExtent);
+    });
+  }
+
+
 
   @override
   Widget build(BuildContext context) {
+
+  // riverpod variables for queries, activity list and requestTypeList
+  final graphQLClient = ref.watch(graphQLClientProvider);
+  final myBookQueries = ref.watch(myBookQueriesProvider(graphQLClient).notifier);
+  List&lt;MyBook&gt; myBookList = myBookQueries.myBookListActivity;
+  final List&lt;String&gt; requestTypeList = myBookQueries.graphQLActivityListType;
+
+  void updateList() {
+    setState(() =&gt; myBookList = myBookQueries.myBookListActivity);
+    _scrollToBottom();
+  }
+
     return Padding(
       padding: const EdgeInsets.all(16.0),
       child: Form(
@@ -593,13 +617,13 @@ class _MyBookFormFieldState extends ConsumerState&lt;MyBookFormField&gt; {
                     decoration: _decoration(&#39;read on:\n$_selectedDate&#39;),
                     canRequestFocus: false,
                     onTap: () async {
-                      DateTime? selectedDate = await showDatePicker(
+                      currentDate = await showDatePicker(
                         context: context,
                         firstDate:
                             DateTime.now().subtract(const Duration(days: 365)),
                         lastDate: DateTime.now().add(const Duration(days: 365)),
                       );
-                      setState(() =&gt; _selectedDate = _dateFormat(selectedDate));
+                      setState(() =&gt; _selectedDate = _dateFormat(currentDate!));
                     },
                   ),
                 ),
@@ -608,7 +632,7 @@ class _MyBookFormFieldState extends ConsumerState&lt;MyBookFormField&gt; {
                   child: DropdownButtonFormField&lt;String&gt;(
                     style: Theme.of(context).textTheme.bodyLarge,
                     decoration: _decoration(&#39;favorite&#39;),
-                    value: _selectedFavorite,
+                    initialValue: _selectedFavorite,
                     items: _favoriteValues.map((String favorite) {
                       return DropdownMenuItem&lt;String&gt;(
                         value: favorite,
@@ -631,22 +655,22 @@ class _MyBookFormFieldState extends ConsumerState&lt;MyBookFormField&gt; {
                 if (_formKey.currentState!.validate()) {
                   switch (widget.querySelected) {
                     case Queries.upsertBook:
-                      await _myBookQueries.upsertBook(
+                      await myBookQueries.upsertBook(
                         id: _textEditId.text.isEmpty ? null : _textEditId.text,
                         bookNumber: int.parse(_textEditBookNumber.text),
                         title: _textEditTitle.text,
                         readOn: currentDate!,
                         favorite: _favoriteCase(_selectedFavorite),
                       );
-                      _updateList();
+                      updateList();
                       break;
                     case Queries.getBook:
-                      await _myBookQueries.getBook(id: _textEditId.text);
-                      _updateList();
+                      await myBookQueries.getBook(id: _textEditId.text);
+                      updateList();
                       break;
                     case Queries.deleteBook:
-                      await _myBookQueries.deleteBook(id: _textEditId.text);
-                      _updateList();
+                      await myBookQueries.deleteBook(id: _textEditId.text);
+                      updateList();
                       break;
                   }
                 }
@@ -660,33 +684,34 @@ class _MyBookFormFieldState extends ConsumerState&lt;MyBookFormField&gt; {
               aspectRatio: 3 / 2,
               child: InputDecorator(
                 decoration: _decoration(&#39;GraphQL Activity (Tap to copy id)&#39;),
-                child: _myBookList.isEmpty
+                child: myBookList.isEmpty
                     ? const Center(child: Text(&#39;NO DATA&#39;))
                     : ListView.separated(
+                        controller: _scrollController,
                         separatorBuilder: (context, index) =&gt; const Divider(),
-                        itemCount: _myBookList.length,
+                        itemCount: myBookList.length,
                         shrinkWrap: true,
                         itemBuilder: (BuildContext context, int index) =&gt;
                             ListTile(
-                                leading: Text(_requestTypeList[index]),
+                                leading: Text(requestTypeList[index]),
                                 title: Text(
-                                    &#39;Nº:${_myBookList[index].bookNumber} ❘ ${_myBookList[index].title}&#39;),
+                                    &#39;Nº:${myBookList[index].bookNumber} ❘ ${myBookList[index].title}&#39;),
                                 subtitle: Text(
-                                  &#39;ID:${_myBookList[index].id}\n${_dateFormat(_myBookList[index].readOn)}&#39;,
+                                  &#39;ID:${myBookList[index].id}\n${_dateFormat(myBookList[index].readOn)}&#39;,
                                 ),
                                 trailing: Text(
-                                    &#39;Fav:\n${_favoriteFormat(_myBookList[index].favorite)}&#39;),
+                                    &#39;Fav:\n${_favoriteFormat(myBookList[index].favorite)}&#39;),
                                 onTap: () async {
                                   // copy id
                                   await Clipboard.setData(
-                                    ClipboardData(text: _myBookList[index].id),
+                                    ClipboardData(text: myBookList[index].id),
                                   ).then(
-                                    (value) =&gt; ScaffoldMessenger.of(context)
+                                    (value) =&gt; context.mounted ? ScaffoldMessenger.of(context)
                                         .showSnackBar(
                                       const SnackBar(
                                         content: Text(&#39;copied id to clipboard&#39;),
                                       ),
-                                    ),
+                                    ): null ,
                                   );
                                 }),
                       ),
@@ -713,7 +738,6 @@ class UpsertIcon extends StatelessWidget {
     );
   }
 }
-
 </code></pre>
 <ul>
 <li><code>main.dart</code>:</li>
